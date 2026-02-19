@@ -2,12 +2,14 @@
 from fastapi import APIRouter
 
 from app.api.deps import CurrentUser
-from app.api.v1.endpoints import lists
+from app.api.v1.endpoints import lists, items
 
 router = APIRouter(prefix="/api/v1")
 
 # Include endpoint routers
 router.include_router(lists.router)
+router.include_router(items.router)
+router.include_router(items.items_router)
 
 
 @router.get("/health")

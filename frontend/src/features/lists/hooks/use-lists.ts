@@ -3,6 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createListAction, getListsAction, getListAction } from "../api/lists";
 import { updateListNameAction } from "../api/update-list-name";
+import { deleteListAction } from "../api/delete-list";
 import { useToast } from "@/components/ui/use-toast";
 
 export function useCreateList() {
@@ -61,6 +62,29 @@ export function useUpdateListName() {
       toast({
         title: "Failed to rename list",
         description: error.message || "An error occurred while renaming the list.",
+        variant: "destructive",
+      });
+    },
+  });
+}
+
+export function useDeleteList() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: deleteListAction,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["list"] });
+      queryClient.invalidateQueries({ queryKey: ["lists"] });
+      toast({
+        title: "List deleted successfully",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Failed to delete list",
+        description: error.message || "An error occurred while deleting the list.",
         variant: "destructive",
       });
     },

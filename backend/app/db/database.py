@@ -1,7 +1,13 @@
 """Database connection module for FastAPI."""
+import sys
+import asyncio
 from collections.abc import AsyncGenerator
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlmodel import SQLModel
+
+# Fix for Windows asyncio event loop with psycopg
+if sys.platform == 'win32':
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 from app.core.config import settings
 

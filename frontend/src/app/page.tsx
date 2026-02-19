@@ -12,6 +12,4 @@ export default async function HomePage() {
   } else {
     redirect("/register");
   }
-
-  return <div>hihi</div>;
 }

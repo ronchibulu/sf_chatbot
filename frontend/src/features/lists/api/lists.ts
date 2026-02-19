@@ -1,7 +1,9 @@
 /** API actions for TODO lists. */
 import type { TodoList, CreateListData } from "../types";
 
-export async function createListAction(data: CreateListData): Promise<TodoList> {
+export async function createListAction(
+  data: CreateListData,
+): Promise<TodoList> {
   const response = await fetch("/api/lists", {
     method: "POST",
     headers: {
@@ -14,12 +16,14 @@ export async function createListAction(data: CreateListData): Promise<TodoList> 
     if (response.status === 401) {
       throw new Error("Not authenticated. Please log in.");
     }
-    const error = await response.json().catch(() => ({ detail: "Failed to create list" }));
+    const error = await response
+      .json()
+      .catch(() => ({ detail: "Failed to create list" }));
     throw new Error(error.detail || "Failed to create list");
   }
 
   const result = await response.json();
-  
+
   // Convert snake_case to camelCase
   return {
     id: result.id,
@@ -46,21 +50,23 @@ export async function getListsAction(): Promise<TodoList[]> {
   }
 
   const results = await response.json();
-  
+
   // Convert snake_case to camelCase for each list
-  return results.map((result: { 
-    id: number; 
-    name: string; 
-    owner_id: string; 
-    created_at: string; 
-    updated_at: string;
-  }) => ({
-    id: result.id,
-    name: result.name,
-    ownerId: result.owner_id,
-    createdAt: result.created_at,
-    updatedAt: result.updated_at,
-  }));
+  return results.map(
+    (result: {
+      id: number;
+      name: string;
+      owner_id: string;
+      created_at: string;
+      updated_at: string;
+    }) => ({
+      id: result.id,
+      name: result.name,
+      ownerId: result.owner_id,
+      createdAt: result.created_at,
+      updatedAt: result.updated_at,
+    }),
+  );
 }
 
 export async function getListAction(listId: number): Promise<TodoList> {
@@ -70,6 +76,8 @@ export async function getListAction(listId: number): Promise<TodoList> {
       "Content-Type": "application/json",
     },
   });
+
+  console.log("Response status:", response.status);
 
   if (!response.ok) {
     if (response.status === 401) {
@@ -85,7 +93,7 @@ export async function getListAction(listId: number): Promise<TodoList> {
   }
 
   const result = await response.json();
-  
+
   // Convert snake_case to camelCase
   return {
     id: result.id,

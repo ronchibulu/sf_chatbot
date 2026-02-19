@@ -9,8 +9,8 @@ export default async function DashboardPage() {
   });
 
   if (!session) {
-    redirect("/login?message=Please log in to continue");
+    redirect("/login");
   }
 
-  return <DashboardClient session={session} />;
+  return <DashboardClient />;
 }

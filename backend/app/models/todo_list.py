@@ -7,6 +7,8 @@ from typing import Optional
 class TodoList(SQLModel, table=True):
     """TodoList model for storing user TODO lists."""
     
+    __tablename__ = "todo_lists"
+    
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str = Field(max_length=255, index=True)
     owner_id: str = Field(index=True)  # References BetterAuth user.id (text)

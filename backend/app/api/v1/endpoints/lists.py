@@ -1,21 +1,33 @@
 """TodoList API endpoints."""
 
-from fastapi import APIRouter, Depends, HTTPException
+import logging
+
+from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import CurrentUser
 from app.db.database import get_db
 from app.schemas.todo_list import TodoListCreate, TodoListResponse
-from app.services.list_service import create_list, get_user_lists, get_list, update_list_name
+from app.services.list_service import (
+    create_list,
+    get_user_lists,
+    get_list,
+    update_list_name,
+    delete_list,
+)
 
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/lists", tags=["lists"])
 
 
 class UpdateListNameRequest(BaseModel):
     """Schema for updating list name."""
-    name: str = Field(..., min_length=1, max_length=255, description="New name for the list")
+
+    name: str = Field(
+        ..., min_length=1, max_length=255, description="New name for the list"
+    )
 
 
 @router.post("", response_model=TodoListResponse, status_code=201)
@@ -38,6 +50,8 @@ async def get_lists(current_user: CurrentUser, db: AsyncSession = Depends(get_db
     """
     Get all TODO lists for the authenticated user.
     """
+    logger.info(f"Getting list for user {current_user['id']}")
+
     lists = await get_user_lists(db, current_user["id"])
     return lists
 
@@ -56,20 +70,23 @@ async def get_list_detail(
     Returns 403 if user doesn't have access to the list.
     """
     list_obj = await get_list(db, list_id, current_user["id"])
-    
+
     if list_obj is None:
         # First check if list exists at all (might be 404 or 403)
         from sqlalchemy import select
         from app.models.todo_list import TodoList
+
         result = await db.execute(select(TodoList).where(TodoList.id == list_id))
         existing_list = result.scalars().first()
-        
+
         if existing_list is None:
             raise HTTPException(status_code=404, detail="List not found")
         else:
             # List exists but user doesn't own it
-            raise HTTPException(status_code=403, detail="You don't have access to this list")
-    
+            raise HTTPException(
+                status_code=403, detail="You don't have access to this list"
+            )
+
     return list_obj
 
 
@@ -90,16 +107,53 @@ async def update_todo_list_name(
     # First check if list exists
     from sqlalchemy import select
     from app.models.todo_list import TodoList
+
     result = await db.execute(select(TodoList).where(TodoList.id == list_id))
     existing_list = result.scalars().first()
-    
+
     if existing_list is None:
         raise HTTPException(status_code=404, detail="List not found")
-    
+
     # Check ownership
     if existing_list.owner_id != current_user["id"]:
-        raise HTTPException(status_code=403, detail="You don't have access to this list")
-    
+        raise HTTPException(
+            status_code=403, detail="You don't have access to this list"
+        )
+
     # Update the name
     list_obj = await update_list_name(db, list_id, current_user["id"], name_data.name)
     return list_obj
+
+
+@router.delete("/{list_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_todo_list(
+    list_id: int,
+    current_user: CurrentUser,
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Delete a TODO list.
+
+    Requires authentication.
+    Returns 404 if list not found.
+    Returns 403 if user doesn't own the list.
+    """
+    # First check if list exists
+    from sqlalchemy import select
+    from app.models.todo_list import TodoList
+
+    result = await db.execute(select(TodoList).where(TodoList.id == list_id))
+    existing_list = result.scalars().first()
+
+    if existing_list is None:
+        raise HTTPException(status_code=404, detail="List not found")
+
+    # Check ownership
+    if existing_list.owner_id != current_user["id"]:
+        raise HTTPException(
+            status_code=403, detail="You don't have access to this list"
+        )
+
+    # Delete the list
+    await delete_list(db, list_id, current_user["id"])
+    return None

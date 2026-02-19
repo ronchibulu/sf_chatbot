@@ -1,4 +1,11 @@
 """Main FastAPI application."""
+import sys
+import asyncio
+
+# Fix for Windows asyncio event loop with psycopg
+if sys.platform == 'win32':
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 

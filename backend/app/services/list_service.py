@@ -111,3 +111,31 @@ async def update_list_name(
     await db.commit()
     await db.refresh(list_obj)
     return list_obj
+
+
+async def delete_list(db: AsyncSession, list_id: int, owner_id: str) -> bool:
+    """
+    Delete a list, verifying ownership.
+
+    Args:
+        db: Database session
+        list_id: ID of the list to delete
+        owner_id: ID of the user (for ownership check)
+
+    Returns:
+        True if list was deleted, False if not found or not owner
+    """
+    result = await db.execute(
+        select(TodoList).where(
+            TodoList.id == list_id,
+            TodoList.owner_id == owner_id
+        )
+    )
+    list_obj = result.scalars().first()
+    
+    if not list_obj:
+        return False
+    
+    await db.delete(list_obj)
+    await db.commit()
+    return True

@@ -97,10 +97,7 @@ export function CreateListModal({ open, onOpenChange }: CreateListModalProps) {
               >
                 Cancel
               </Button>
-              <Button
-                type="submit"
-                disabled={createList.isPending}
-              >
+              <Button type="submit" disabled={createList.isPending}>
                 {createList.isPending ? (
                   <>
                     <Loader2 className="animate-spin" />
