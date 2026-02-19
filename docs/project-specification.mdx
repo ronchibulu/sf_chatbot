@@ -1,0 +1,70 @@
+# Sleekflow Full Stack Software Engineer Project
+
+## Objective
+
+Develop a scalable and well-designed TODO list web application that allows users to manage their TODOs, demonstrating your full stack development skills, API design expertise, and software engineering best practices.
+
+## Project Overview
+
+### TODO List Web Application
+
+#### Backend API (Python FastAPI Server with SQLModel)
+
+- **TODOs CRUD**
+- **Each TODO has:**
+  - Unique ID
+  - Name
+  - Description
+  - Due Date
+  - Status (Not Started, In Progress, Completed)
+  - priority
+  - tags
+- Filtering (by status, due date, tags)
+- Sorting (e.g., by due date, status, name)
+
+#### Frontend UI (Next.js)
+
+- Responsive design
+- User interface for managing TODOs (create, update, delete, filter, sort)
+- Real-time collaboration (e.g., shared TODO lists, activity feeds)
+
+#### Must-have Features
+
+- **Team features**
+  - User authentication and registration (BetterAuth)
+  - Authorization (e.g., role-based access control using ABAC Implementation)
+- DevOps (CI/CD pipeline, Docker)
+- Architecture diagram
+
+## Design Requirements
+
+### Technical Design
+
+- Adhere to SOLID principles
+- Use Test-Driven Development (TDD)
+- Ensure code and design consistency
+
+### API Design
+
+- Use clear and consistent naming conventions
+- Implement proper model mapping (TypeScript in front-end, Python dataclasses in back-end)
+
+### Documentation
+
+- Include README with instructions for setup and usage
+- Document API endpoints and functionality
+
+## Deliverables
+
+- Create docker-compose for both front-end and back-end servers.
+
+## Guidelines
+
+- This Project is a mono-repo including both front-end (/frontend) and back-end (/backend).
+- Use Python with FastAPI for the backend API development.
+- Use Next.js for the front-end framework.
+- Use PostgreSQL for storing TODOs and user data.
+- Implement error handling and validations for API requests.
+- Write unit tests and integration tests for the core functionality (both backend and frontend).
+- Ensure your application can be easily run and tested locally.
+- Create docker-compose.yml on the outermost layer to init both front-end and back-end applications.

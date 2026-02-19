@@ -1,0 +1,176 @@
+@import "tailwindcss";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+
+:root {
+  /* UX Design System Colors - Notion-inspired Palette */
+  --background: #ffffff;
+  --surface: #f7f7f5;
+  --border: #e8e8e6;
+  --foreground: #37352f;
+  --text-secondary: #9b9a97;
+
+  /* Semantic Colors */
+  --primary: #2383e2;
+  --primary-foreground: #ffffff;
+
+  --secondary: #f7f7f5;
+  --secondary-foreground: #37352f;
+
+  --success: #0f7b6c;
+  --success-foreground: #ffffff;
+
+  --warning: #d9730d;
+  --warning-foreground: #ffffff;
+
+  --destructive: #e03e3e;
+  --destructive-foreground: #ffffff;
+
+  --muted: #f7f7f5;
+  --muted-foreground: #9b9a97;
+
+  --accent: #2383e2;
+  --accent-foreground: #ffffff;
+
+  --card: #ffffff;
+  --card-foreground: #37352f;
+
+  --popover: #ffffff;
+  --popover-foreground: #37352f;
+
+  --input: #e8e8e6;
+  --ring: #2383e2;
+
+  --radius-sm: 6px;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+}
+
+@theme inline {
+  /* Map design system colors to Tailwind */
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-foreground: var(--foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Typography from UX Design System */
+  --font-sans:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* Border Radius */
+  --radius-sm: var(--radius-sm);
+  --radius: var(--radius);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+/* Custom utility classes from UX Design System */
+.text-h1 {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.text-h2 {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.text-h3 {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.text-body {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.text-small {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.text-caption {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Card hover effect from UX Design */
+.card-hover {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Focus visible for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Touch targets for mobile (minimum 44x44px) */
+@media (max-width: 767px) {
+  button,
+  a,
+  input[type="checkbox"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
